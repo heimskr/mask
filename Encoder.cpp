@@ -1,3 +1,4 @@
+#include <span>
 #include <stdexcept>
 
 #include "Encoder.h"
@@ -72,10 +73,11 @@ namespace Chemion {
 		return encode(chars);
 	}
 
-	std::vector<uint8_t> fromColumns(const std::array<std::array<bool, 7>, 24> &columns) {
-		std::array<char, 168> flat;
+	std::vector<uint8_t> fromColumns(const std::span<std::array<bool, 7>> &columns) {
+		std::array<char, 168> flat {};
+		std::fill(flat.begin(), flat.end(), ' ');
 		for (size_t row = 0; row < 7; ++row)
-			for (size_t column = 0; column < 24; ++column)
+			for (size_t column = 0; column < 24 && column < columns.size(); ++column)
 				flat[row * 24 + column] = columns[column][row]? 'X' : ' ';
 		return encode(flat);
 	}

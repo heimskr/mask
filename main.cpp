@@ -809,8 +809,21 @@ int main() {
 			"            XXXXXXXXXXXX\n"
 			"            XXXXXXXXXXXX";
 
-		const auto enc1 = Chemion::encode(image1);
-		const auto enc2 = Chemion::encode(image2);
+		// const auto enc1 = Chemion::encode(image1);
+		// const auto enc2 = Chemion::encode(image2);
+
+
+		std::vector<std::array<bool, 7>> cols1;
+		std::vector<std::array<bool, 7>> cols2;
+		for (size_t i = 0; i < 24 / 2; ++i) {
+			cols1.push_back(std::array<bool, 7> {false, false, false, false, false, false, false});
+			cols1.push_back(std::array<bool, 7> {true, true, true, true, true, true, true});
+			cols2.push_back(std::array<bool, 7> {true, true, true, true, true, true, true});
+			cols2.push_back(std::array<bool, 7> {false, false, false, false, false, false, false});
+		}
+
+		const auto enc1 = Chemion::fromColumns(std::span(cols1));
+		const auto enc2 = Chemion::fromColumns(std::span(cols2));
 
 		auto batch = [&](const auto &enc, size_t count) -> bool {
 			size_t i = 0;
@@ -842,7 +855,7 @@ int main() {
 		for (size_t i = 0; i < 10000; ++i) {
 			if (!batch(i % 2? enc1 : enc2, 20))
 				return;
-			std::this_thread::sleep_for(std::chrono::milliseconds(75));
+			std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		}
 
 		DBG("Writing succeeded.");
