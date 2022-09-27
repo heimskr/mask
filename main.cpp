@@ -822,13 +822,17 @@ int main() {
 			cols2.push_back(std::array<bool, 7> {false, false, false, false, false, false, false});
 		}
 
-		const auto enc1 = Chemion::fromColumns(std::span(cols1));
-		const auto enc2 = Chemion::fromColumns(std::span(cols2));
+		// const auto enc1 = Chemion::fromColumns(std::span(cols1));
+		// const auto enc2 = Chemion::fromColumns(std::span(cols2));
+		const auto enc1 = Chemion::encodeString("Hello,");
+		const auto enc2 = Chemion::encodeString("World!");
+
 
 		auto batch = [&](const auto &enc, size_t count) -> bool {
 			size_t i = 0;
 			std::vector<uint8_t> bytes;
 			bytes.reserve(count);
+
 			while (i + count < enc.size()) {
 				for (size_t j = 0; j < count; ++j)
 					bytes.push_back(enc[i++]);
@@ -855,7 +859,7 @@ int main() {
 		for (size_t i = 0; i < 10000; ++i) {
 			if (!batch(i % 2? enc1 : enc2, 20))
 				return;
-			std::this_thread::sleep_for(std::chrono::milliseconds(500));
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 		}
 
 		DBG("Writing succeeded.");

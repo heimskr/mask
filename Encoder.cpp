@@ -2,6 +2,7 @@
 #include <stdexcept>
 
 #include "Encoder.h"
+#include "Font.h"
 
 namespace Chemion {
 	static uint8_t getPair(char character) {
@@ -80,5 +81,21 @@ namespace Chemion {
 			for (size_t column = 0; column < 24 && column < columns.size(); ++column)
 				flat[row * 24 + column] = columns[column][row]? 'X' : ' ';
 		return encode(flat);
+	}
+
+	std::vector<uint8_t> encodeString(std::string_view str) {
+		std::vector<std::array<bool, 7>> columns;
+		for (const char ch: str) {
+			const auto &pixels = font.at(ch);
+			for (int col = 0; col < 4; ++col) {
+				std::array<bool, 7> column;
+				for (int row = 0; row < 7; ++row) {
+					column[row] = pixels[row][col];
+				}
+				columns.push_back(column);
+			}
+		}
+
+		return fromColumns(columns);
 	}
 }

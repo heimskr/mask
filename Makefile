@@ -21,7 +21,10 @@ Encoder.o: Encoder.cpp Encoder.h
 Timer.o: Timer.cpp Timer.h
 	g++ $(CPPFLAGS) -c $< -o $@
 
-main: main.o $(BLUEZ_OBJS) Encoder.o Timer.o
+Font.o: Font.cpp Font.h
+	g++ $(CPPFLAGS) -c $< -o $@
+
+main: main.o $(BLUEZ_OBJS) Encoder.o Timer.o Font.o
 	g++ $^ -o $@ $(LDFLAGS)
 
 %.o: %.c
