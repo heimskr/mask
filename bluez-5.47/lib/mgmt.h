@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  *  BlueZ - Bluetooth protocol stack for Linux
  *

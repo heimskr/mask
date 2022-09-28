@@ -15,16 +15,19 @@ all: main
 main.o: main.cpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
-Encoder.o: Encoder.cpp Encoder.h
+Encoder.o: Encoder.cpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
-Timer.o: Timer.cpp Timer.h
+Timer.o: Timer.cpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
-Font.o: Font.cpp Font.h
+Font.o: Font.cpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
-main: main.o $(BLUEZ_OBJS) Encoder.o Timer.o Font.o
+Mgmt.o: Mgmt.cpp
+	g++ $(CPPFLAGS) -c $< -o $@
+
+main: main.o $(BLUEZ_OBJS) Encoder.o Timer.o Font.o Mgmt.o Bluetooth.o
 	g++ $^ -o $@ $(LDFLAGS)
 
 %.o: %.c
@@ -38,3 +41,14 @@ test: main
 
 clean:
 	rm -f *.o main $(shell find . -name '*.o')
+
+DEPFILE  = .dep
+DEPTOKEN = "\# MAKEDEPENDS"
+DEPFLAGS = -f $(DEPFILE) -s $(DEPTOKEN)
+
+depend:
+	@ echo $(DEPTOKEN) > $(DEPFILE)
+	makedepend $(DEPFLAGS) -- $(COMPILER) $(CFLAGS) -- $(shell find . -name '*.cpp') 2>/dev/null
+	@ rm $(DEPFILE).bak
+
+sinclude $(DEPFILE)
