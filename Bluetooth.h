@@ -9,6 +9,17 @@
 #include <sstream>
 #include <vector>
 
+extern "C" {
+#include "lib/bluetooth.h"
+#include "lib/sdp.h"
+#include "lib/uuid.h"
+#include "btio/btio.h"
+#include "attrib/att.h"
+#include "attrib/gattrib.h"
+#include "attrib/gatt.h"
+#include "attrib/gatttool.h"
+}
+
 #include "Debug.h"
 #include "CVPair.h"
 #include "Mgmt.h"

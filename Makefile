@@ -27,7 +27,13 @@ Font.o: Font.cpp
 Mgmt.o: Mgmt.cpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
-main: main.o $(BLUEZ_OBJS) Encoder.o Timer.o Font.o Mgmt.o Bluetooth.o
+Glasses.o: Glasses.cpp
+	g++ $(CPPFLAGS) -c $< -o $@
+
+Bluetooth.o: Bluetooth.cpp
+	g++ $(CPPFLAGS) -c $< -o $@
+
+main: main.o $(BLUEZ_OBJS) Encoder.o Timer.o Font.o Mgmt.o Bluetooth.o Glasses.o
 	g++ $^ -o $@ $(LDFLAGS)
 
 %.o: %.c
