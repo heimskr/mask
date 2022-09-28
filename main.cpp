@@ -891,7 +891,7 @@ int main() {
 
 		DBG("Entering loop.");
 
-		Scroller scroller("Has anyone really been far even as decided to use even go want to do look more like?", 900, 100);
+		Scroller scroller("Has anyone really been far even as decided to use even go want to do look more like?", 3000, 40);
 
 		for (size_t i = 0; i < 10000; ++i) {
 			if (!scroller.render(batch))
