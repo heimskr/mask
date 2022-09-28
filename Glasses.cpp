@@ -59,4 +59,10 @@ namespace Chemion {
 
 		return true;
 	}
+
+	bool Glasses::showString(std::string_view string) {
+		if (rx == nullptr)
+			return false;
+		return bluetooth.batch(Chemion::encodeString(string), *rx, 20);
+	}
 }

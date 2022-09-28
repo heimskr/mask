@@ -36,6 +36,8 @@ int main() {
 	bt.setup(0);
 
 	std::thread th([&] {
+		auto wait = [](size_t millis) { std::this_thread::sleep_for(std::chrono::milliseconds(millis)); };
+
 		Chemion::Glasses glasses;
 
 		if (!glasses.connect("EB:9F:86:0E:E2:F4")) {
@@ -108,12 +110,14 @@ int main() {
 
 		// const auto enc1 = Chemion::fromColumns(std::span(cols1));
 		// const auto enc2 = Chemion::fromColumns(std::span(cols2));
-		const auto enc1 = Chemion::encodeString("Hello,");
-		const auto enc2 = Chemion::encodeString("World!");
-		const auto enc3 = Chemion::encodeString("Hello, World!");
 
-		Chemion::Scroller scroller("Has anyone really been far even as decided to use even go want to do look more like?", 3000, 40);
-		glasses.scroll(scroller, 1000);
+		glasses.showString("Hello,");
+		wait(2'000);
+		glasses.showString("World!");
+		wait(2'000);
+
+		Chemion::Scroller scroller("Has anyone really been far even as decided to use even go want to do look more like?", 3'000, 40);
+		glasses.scroll(scroller, 1'000);
 
 		DBG("Done.");
 	});
