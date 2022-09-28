@@ -83,7 +83,7 @@ namespace Chemion {
 		return encode(flat);
 	}
 
-	std::vector<uint8_t> encodeString(std::string_view str) {
+	std::vector<std::array<bool, 7>> stringColumns(std::string_view str) {
 		std::vector<std::array<bool, 7>> columns;
 		for (const char ch: str) {
 			const auto &pixels = font.at(ch);
@@ -96,6 +96,11 @@ namespace Chemion {
 			}
 		}
 
+		return columns;
+	}
+
+	std::vector<uint8_t> encodeString(std::string_view str) {
+		auto columns = stringColumns(str);
 		return fromColumns(columns);
 	}
 }

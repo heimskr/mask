@@ -6,6 +6,7 @@
 #include <condition_variable>
 #include <cstring>
 #include <cstdlib>
+#include <functional>
 #include <glib.h>
 #include <iomanip>
 #include <iostream>
@@ -698,6 +699,39 @@ uint8_t fromHex(std::string_view str) {
 
 const Characteristic *rxptr = nullptr;
 
+struct Scroller {
+	std::vector<std::array<bool, 7UL>> columns;
+	ssize_t offset = 0;
+	bool increasing = true;
+	std::chrono::milliseconds edgeDelay;
+	std::chrono::milliseconds delay;
+
+	Scroller(std::string_view str, int64_t edge_delay = 800, int64_t delay_ = 200):
+		columns(Chemion::stringColumns(str)), edgeDelay(edge_delay), delay(delay_) {}
+
+	bool render(const std::function<bool(const std::vector<uint8_t> &, size_t)> &fn) {
+		if (!fn(Chemion::fromColumns(std::span(columns).subspan(offset, 24)), 20))
+			return false;
+
+		if (increasing) {
+			if (std::ssize(columns) - 24 <= offset) {
+				increasing = false;
+				std::this_thread::sleep_for(edgeDelay);
+			} else
+				++offset;
+		} else {
+			if (offset == 0) {
+				increasing = true;
+				std::this_thread::sleep_for(edgeDelay);
+			} else
+				--offset;
+		}
+
+		std::this_thread::sleep_for(delay);
+		return true;
+	}
+};
+
 int main() {
 	mgmt_setup(0);
 
@@ -826,6 +860,7 @@ int main() {
 		// const auto enc2 = Chemion::fromColumns(std::span(cols2));
 		const auto enc1 = Chemion::encodeString("Hello,");
 		const auto enc2 = Chemion::encodeString("World!");
+		const auto enc3 = Chemion::encodeString("Hello, World!");
 
 
 		auto batch = [&](const auto &enc, size_t count) -> bool {
@@ -856,10 +891,13 @@ int main() {
 
 		DBG("Entering loop.");
 
+		Scroller scroller("Has anyone really been far even as decided to use even go want to do look more like?", 900, 100);
+
 		for (size_t i = 0; i < 10000; ++i) {
-			if (!batch(i % 2? enc1 : enc2, 20))
+			if (!scroller.render(batch))
 				return;
-			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+			if (i == 0)
+				std::this_thread::sleep_for(std::chrono::milliseconds(1'000));
 		}
 
 		DBG("Writing succeeded.");
