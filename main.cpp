@@ -25,20 +25,16 @@
 #include "Scroller.h"
 #include "Timer.h"
 
-static GMainLoop *event_loop = nullptr;
-
 int main() {
-
-	event_loop = g_main_loop_new(nullptr, false);
+	GMainLoop *event_loop = g_main_loop_new(nullptr, false);
 	bool running = true;
-
-	Bluetooth bt;
-	bt.setup(0);
 
 	std::thread th([&] {
 		auto wait = [](size_t millis) { std::this_thread::sleep_for(std::chrono::milliseconds(millis)); };
 
 		Chemion::Glasses glasses;
+
+		glasses.setup(0);
 
 		if (!glasses.connect("EB:9F:86:0E:E2:F4")) {
 			DBG("Couldn't connect to glasses.");

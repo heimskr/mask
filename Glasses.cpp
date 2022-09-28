@@ -5,6 +5,10 @@
 #include "Scroller.h"
 
 namespace Chemion {
+	void Glasses::setup(uint16_t index) {
+		bluetooth.setup(index);
+	}
+
 	bool Glasses::connect(const char *addr) {
 		if (!bluetooth.connectDevice(addr))
 			return false;
