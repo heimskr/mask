@@ -73,6 +73,7 @@ class Bluetooth {
 		bool waitForConnection(size_t milliseconds = 5'000);
 		bool waitForServices(size_t milliseconds = 5'000);
 		bool findCharacteristics(uint16_t start = 1, uint16_t end = 0xffff, const char *uuid = nullptr);
+		bool writeByte(const Characteristic &, uint8_t);
 
 		template <typename C>
 		bool writeBytes(const Characteristic &characteristic, const C &bytes) {
@@ -102,5 +103,30 @@ class Bluetooth {
 			return true;
 		}
 
-		bool writeByte(const Characteristic &, uint8_t);
+		template <typename E>
+		bool batch(const E &enc, const Characteristic &rx, size_t count) {
+			size_t i = 0;
+			std::vector<uint8_t> bytes;
+			bytes.reserve(count);
+
+			while (i + count < enc.size()) {
+				for (size_t j = 0; j < count; ++j)
+					bytes.push_back(enc[i++]);
+				if (!writeBytes(rx, bytes)) {
+					DBG("Writing failed.");
+					return false;
+				}
+				bytes.clear();
+			}
+
+			while (i < enc.size())
+				bytes.push_back(enc[i++]);
+
+			if (!bytes.empty() && !writeBytes(rx, bytes)) {
+				DBG("Final write failed.");
+				return false;
+			}
+
+			return true;
+		}
 };

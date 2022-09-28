@@ -125,7 +125,6 @@ int main() {
 		DBG("Found RX characteristic.");
 		DBG("Connection complete.");
 
-
 		// const char *image1 =
 		// 	" XXX X  X XXX  XXXX XXX \n"
 		// 	"X    X  X X  X X    X  X\n"
@@ -178,7 +177,6 @@ int main() {
 		// const auto enc1 = Chemion::encode(image1);
 		// const auto enc2 = Chemion::encode(image2);
 
-
 		std::vector<std::array<bool, 7>> cols1;
 		std::vector<std::array<bool, 7>> cols2;
 		for (size_t i = 0; i < 24 / 2; ++i) {
@@ -194,35 +192,13 @@ int main() {
 		const auto enc2 = Chemion::encodeString("World!");
 		const auto enc3 = Chemion::encodeString("Hello, World!");
 
-		auto batch = [&](const auto &enc, size_t count) -> bool {
-			size_t i = 0;
-			std::vector<uint8_t> bytes;
-			bytes.reserve(count);
-
-			while (i + count < enc.size()) {
-				for (size_t j = 0; j < count; ++j)
-					bytes.push_back(enc[i++]);
-				if (!bt.writeBytes(rx, bytes)) {
-					DBG("Writing failed.");
-					return false;
-				}
-				bytes.clear();
-			}
-
-			while (i < enc.size())
-				bytes.push_back(enc[i++]);
-
-			if (!bytes.empty() && !bt.writeBytes(rx, bytes)) {
-				DBG("Final write failed.");
-				return false;
-			}
-
-			return true;
-		};
-
 		DBG("Entering loop.");
 
 		Scroller scroller("Has anyone really been far even as decided to use even go want to do look more like?", 3000, 40);
+
+		auto batch = [&](const std::vector<uint8_t> &enc, size_t count) {
+			return bt.batch(enc, rx, count);
+		};
 
 		for (size_t i = 0; i < 10000; ++i) {
 			if (!scroller.render(batch))
