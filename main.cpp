@@ -1,23 +1,5 @@
 // Contains code from bluepy.
 
-#include <atomic>
-#include <cassert>
-#include <cerrno>
-#include <condition_variable>
-#include <cstring>
-#include <cstdlib>
-#include <functional>
-#include <glib.h>
-#include <iomanip>
-#include <iostream>
-#include <map>
-#include <mutex>
-#include <optional>
-#include <sstream>
-#include <thread>
-#include <utility>
-#include <vector>
-
 #include "Bluetooth.h"
 #include "Debug.h"
 #include "Glasses.h"
