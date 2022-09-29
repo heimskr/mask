@@ -11,6 +11,9 @@ namespace Chemion {
 
 			std::vector<std::array<bool, 7>> data;
 
+			Image();
+			Image(std::vector<std::array<bool, 7>> &&data_): data(data_) {}
+
 			void filledSquare(int x, int y, int w, int h);
 			void squareOutline(int x, int y, int w, int h);
 	};

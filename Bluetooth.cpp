@@ -459,7 +459,7 @@ bool Bluetooth::findCharacteristics(uint16_t start, uint16_t end, const char *uu
 		size_t char_id = nextCharacteristic++;
 		auto &entry = characteristicMap.try_emplace(char_id).first->second;
 		nextEntry = &entry;
-		gatt_discover_char(attrib, start, end, &bt_uuid, char_cb, (void *) char_id);
+		gatt_discover_char(attrib, start, end, &bt_uuid, char_cb, this);
 		if (!entry.pair.wait_for(std::chrono::milliseconds(5'000)))
 			return false;
 		characteristics = std::move(entry.characteristics);
@@ -469,7 +469,7 @@ bool Bluetooth::findCharacteristics(uint16_t start, uint16_t end, const char *uu
 	size_t char_id = nextCharacteristic++;
 	auto &entry = characteristicMap.try_emplace(char_id).first->second;
 	nextEntry = &entry;
-	gatt_discover_char(attrib, start, end, nullptr, char_cb, (void *) char_id);
+	gatt_discover_char(attrib, start, end, nullptr, char_cb, this);
 	if (!entry.pair.wait_for(std::chrono::milliseconds(5'000)))
 		return false;
 	characteristics = std::move(entry.characteristics);

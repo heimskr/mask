@@ -1,6 +1,10 @@
 #include "Image.h"
 
 namespace Chemion {
+	Image::Image() {
+		data.resize(24);
+	}
+
 	void Image::filledSquare(int x, int y, int w, int h) {
 		for (int col = x; col < x + w; ++col)
 			for (int row = y; row < y + h; ++row)
