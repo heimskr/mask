@@ -74,7 +74,7 @@ namespace Chemion {
 		return encode(chars);
 	}
 
-	std::vector<uint8_t> fromColumns(const std::span<std::array<bool, 7>> &columns) {
+	std::vector<uint8_t> fromColumns(const std::span<const std::array<bool, 7>> &columns) {
 		std::array<char, 168> flat {};
 		std::fill(flat.begin(), flat.end(), ' ');
 		for (size_t row = 0; row < 7; ++row)

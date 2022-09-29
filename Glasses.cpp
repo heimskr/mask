@@ -2,6 +2,7 @@
 
 #include "Debug.h"
 #include "Glasses.h"
+#include "Image.h"
 #include "Scroller.h"
 
 namespace Chemion {
@@ -68,5 +69,11 @@ namespace Chemion {
 		if (rx == nullptr)
 			return false;
 		return bluetooth.batch(Chemion::encodeString(string), *rx, 20);
+	}
+
+	bool Glasses::display(const Image &image) {
+		if (rx == nullptr)
+			return false;
+		return bluetooth.batch(Chemion::fromColumns(image.data), *rx, 20);
 	}
 }

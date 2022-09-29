@@ -12,6 +12,8 @@ BLUEZ_OBJS := $(BLUEZ_SRCS:.c=.o)
 
 all: main
 
+# Yes, I know this is repetitive. I'll fix it eventually.
+
 main.o: main.cpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
@@ -33,7 +35,10 @@ Glasses.o: Glasses.cpp
 Bluetooth.o: Bluetooth.cpp
 	g++ $(CPPFLAGS) -c $< -o $@
 
-main: main.o $(BLUEZ_OBJS) Encoder.o Timer.o Font.o Mgmt.o Bluetooth.o Glasses.o
+Image.o: Image.cpp
+	g++ $(CPPFLAGS) -c $< -o $@
+
+main: main.o $(BLUEZ_OBJS) Encoder.o Timer.o Font.o Mgmt.o Bluetooth.o Glasses.o Image.o
 	g++ $^ -o $@ $(LDFLAGS)
 
 %.o: %.c

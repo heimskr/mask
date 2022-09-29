@@ -2,8 +2,9 @@
 
 #include "Bluetooth.h"
 #include "Debug.h"
-#include "Glasses.h"
 #include "Encoder.h"
+#include "Glasses.h"
+#include "Image.h"
 #include "Scroller.h"
 #include "Timer.h"
 
@@ -93,6 +94,12 @@ int main() {
 		wait(2'000);
 		glasses.showString("World!");
 		wait(2'000);
+
+		Chemion::Image image;
+		image.squareOutline(0, 0, 24, 7);
+		image.filledSquare(2, 2, 20, 3);
+		glasses.display(image);
+		wait(4'000);
 
 		Chemion::Scroller scroller("Has anyone really been far even as decided to use even go want to do look more like?", 3'000, 40);
 		glasses.scroll(scroller, 1'000);
