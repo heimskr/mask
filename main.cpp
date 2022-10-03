@@ -96,8 +96,15 @@ int main() {
 		wait(2'000);
 
 		Chemion::Image image;
-		image.squareOutline(0, 0, 24, 7);
-		image.filledSquare(2, 2, 20, 3);
+		image.rectangleOutline(0, 0, 24, 7);
+		image.filledRectangle(2, 2, 20, 3);
+		glasses.display(image);
+		wait(4'000);
+
+		image.clear();
+		image.circleOutline(3, 3, 2);
+		image.circleOutline(16, 3, 3);
+		image.circleOutline(16, 3, 1);
 		glasses.display(image);
 		wait(4'000);
 
