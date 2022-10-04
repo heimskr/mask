@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "Image.h"
 
 namespace Chemion {
@@ -33,17 +35,21 @@ namespace Chemion {
 	}
 
 	static void drawOnCircle(Image &image, int center_x, int center_y, int x, int y) {
-		image(center_x + x, center_y + y) = true;
-		image(center_x + x, center_y - y) = true;
-		image(center_x - x, center_y + y) = true;
-		image(center_x - x, center_y - y) = true;
-		image(center_x + y, center_y + x) = true;
-		image(center_x + y, center_y - x) = true;
-		image(center_x - y, center_y + x) = true;
-		image(center_x - y, center_y - x) = true;
+		for (const auto [a, b]: std::initializer_list<std::pair<int, int>> {
+			{x, y}, {x, -y}, {-x, y}, {-x, -y}, {y, x}, {y, -x}, {-y, x}, {-y, -x}
+		}) {
+			try {
+				image(center_x + a, center_y + b) = true;
+			} catch (const std::out_of_range &) {}
+		}
 	}
 
 	void Image::circleOutline(int center_x, int center_y, int radius) {
+		if (radius == 0) {
+			(*this)(center_x, center_y) = true;
+			return;
+		}
+
 		int x = 0;
 		int y = radius;
 		int d = 3 - 2 * radius;

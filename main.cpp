@@ -101,12 +101,19 @@ int main() {
 		glasses.display(image);
 		wait(4'000);
 
-		image.clear();
-		image.circleOutline(3, 3, 2);
-		image.circleOutline(16, 3, 3);
-		image.circleOutline(16, 3, 1);
-		glasses.display(image);
-		wait(4'000);
+		// image.clear();
+		// image.circleOutline(3, 3, 2);
+		// image.circleOutline(16, 3, 3);
+		// image.circleOutline(16, 3, 1);
+		// glasses.display(image);
+		// wait(4'000);
+
+		for (int i = 0; i < 14; ++i) {
+			image.clear();
+			image.circleOutline(12, 3, i);
+			glasses.display(image);
+			wait(1'000);
+		}
 
 		Chemion::Scroller scroller("Has anyone really been far even as decided to use even go want to do look more like?", 3'000, 40);
 		glasses.scroll(scroller, 1'000);
